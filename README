@@ -22,6 +22,11 @@ Run it:
 >  insmod $DIR/keyloader-kmod.ko keyid=$KEYID platformid=$PLATFORMID
 
 
+Your key will now appear in the .platform keyring. YOu can check with:
+
+> keyctl show %:.platform
+
+
 Sign your kernel module with the generated keypair:
 
 > /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /root/my_public_key.priv /root/my_public_key.der ./simple-kmod.ko
