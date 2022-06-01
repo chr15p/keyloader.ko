@@ -1,1 +1,39 @@
 Do not use this, it will crash your computer, open up all your data to evil hackers, and then go off and murder some kittens just for fun
+
+To run:
+
+Download this repo and move into it
+
+> cd $DIR
+
+Build the kernel module:
+
+> make
+
+Create a public/private keypair as described at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/signing-kernel-modules-for-secure-boot_managing-monitoring-and-updating-the-kernel#generating-a-public-and-private-key-pair_signing-kernel-modules-for-secure-boot
+
+
+Run the keyloader.sh script to load the public key into the user's keyring
+>  $DIR/keyloader.sh my_public_key.der     
+
+This will give you a command to run to load the keyloader-mod.ko file with the required parameters
+
+Run it:
+>  insmod $DIR/keyloader-kmod.ko keyid=$KEYID platformid=$PLATFORMID
+
+
+Sign your kernel module with the generated keypair:
+
+> /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /root/my_public_key.priv /root/my_public_key.der ./simple-kmod.ko
+
+Then load it:
+
+> modprobe simple-kmod.ko
+
+It should load cleanly and without errors.
+
+
+To remove the key from the .platform keyring unload the keyloader-mod kernel module:
+> rmmod keyloader-kmod
+
+~      
