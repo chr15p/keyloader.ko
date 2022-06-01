@@ -39,6 +39,8 @@ fi
 # load the keyloader kernel mod to link our key 
 # from the user keyring to the .platform keyring
 # (currectly echo'd out for testing)
-echo insmod ./keyloader-kmod.ko keyid=$KEYID platformid=$PLATFORMID
+
+DIR=$(dirname $0)
+echo "Now run: insmod $DIR/keyloader-kmod.ko keyid=$KEYID platformid=$PLATFORMID"
 
 # Now our key is in the platform keyring and any kmods signed with it will load without error
